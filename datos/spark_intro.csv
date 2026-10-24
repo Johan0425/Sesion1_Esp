@@ -1,0 +1,11 @@
+﻿order_id,order_date,country,product,category,units_sold,unit_price
+1,2024-01-02,Spain,Laptop,Electronics,2,1200
+2,2024-01-03,Spain,Mouse,Accessories,5,25
+3,2024-01-05,France,Laptop,Electronics,1,1150
+4,2024-01-06,Germany,Keyboard,Accessories,3,45
+5,2024-01-07,Spain,Monitor,Electronics,2,300
+6,2024-01-08,France,Mouse,Accessories,10,23
+7,2024-01-10,Germany,Laptop,Electronics,1,1300
+8,2024-01-11,Spain,Keyboard,Accessories,4,42
+9,2024-01-12,France,Monitor,Electronics,1,280
+10,2024-01-14,Germany,Mouse,Accessories,6,27
