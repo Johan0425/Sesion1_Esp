@@ -1,0 +1,6 @@
+aeropuerto_id,nombre,ciudad,pais,lat,lon
+MAD,Adolfo Suárez Madrid-Barajas,Madrid,España,40.472,-3.561
+BCN,Josep Tarradellas Barcelona-El Prat,Barcelona,España,41.297,2.078
+JFK,John F. Kennedy International,Nueva York,EEUU,40.641,-73.778
+LHR,Heathrow,Londres,Reino Unido,51.47,-0.454
+CDG,Charles de Gaulle,París,Francia,49.009,2.547
