@@ -56,13 +56,11 @@ Después reconcilia **11 reglas** (los totales de vuelos, intervenciones y costo
 - `02_silver_transform.py`: **faltaba el `)` de cierre** de `mantenimientos_slv` (error de sintaxis); se normalizan llaves (`UPPER(TRIM)`), se añade `ruta_por_revisar`, `costo_usd` pasa a `decimal(14,2)` y las validaciones ahora son `assert` bloqueantes.
 - `03_gold_analytics.py`: estaba incompleto y usaba el catálogo `airline_exam` (no existe) → `airline_mantenimiento`; ahora crea la sesión, publica 5 tablas Gold (incluido `ranking_costo_aeronave` con `Window`) y reconcilia costos con Silver.
 
-## Cómo ejecutarlo en Databricks
+## Job
 
-1. **Workspace → Create → Git folder** con la URL de este repositorio.
-2. (Opcional) Subir los 4 CSV de `datos/` a `/Volumes/aerolinea/fuentes/landing`. Si no se suben, la tarea `preparacion` los copia desde la carpeta `datos` del Git folder.
-3. **Jobs & Pipelines → Create → Job** con estas tareas (todas en **Serverless**, *Run if: All succeeded*, *Maximum concurrent runs = 1*):
+El Job `Aerolinea_2026II_Pipeline` (definición en [`job/aerolinea_job.json`](job/aerolinea_job.json)) ejecuta las 8 tareas en Serverless, con *Run if: All succeeded* y como máximo una ejecución a la vez:
 
-| Tarea | Tipo | Ruta | Depends on |
+| Tarea | Tipo | Ruta | Depende de |
 |---|---|---|---|
 | `preparacion` | Notebook | `00_Preparacion_Aerolinea` | — |
 | `bronze` | Notebook | `01_Bronze_Aerolinea` | preparacion |
@@ -73,9 +71,7 @@ Después reconcilia **11 reglas** (los totales de vuelos, intervenciones y costo
 | `silver_py` | Python script | `scripts/02_silver_transform.py` | bronze_py |
 | `gold_py` | Python script | `scripts/03_gold_analytics.py` | silver_py |
 
-   También se puede crear desde **Create job → (⋮) Edit as JSON / Import** pegando `job/aerolinea_job.json`, después de reemplazar `<TU_USUARIO>` por el correo de la cuenta. Nunca hay más de 2 tareas en paralelo, dentro del límite de 5 de Free Edition.
-
-4. **Run now** y revisar en **Runs** que las 8 tareas terminen en *Succeeded*.
+La tarea `preparacion` crea el catálogo, los esquemas y el volumen, y copia los 4 CSV de `datos/` si no están en el volumen. Nunca se ejecutan más de 2 tareas en paralelo, dentro del límite de 5 de Free Edition. En el JSON, la ruta del workspace aparece como `<TU_USUARIO>`, que corresponde al usuario de la cuenta donde se crea el Job.
 
 ## Pruebas
 
