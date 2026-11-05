@@ -17,7 +17,7 @@ Pipeline Bronze → Silver → Gold sobre 50.000 vuelos (`flights.csv`, `airline
 | 6 · Machine learning | [`notebooks/02_ML_Retraso_Llegada`](notebooks/02_ML_Retraso_Llegada.py) y [`resultados_ml/`](resultados_ml) |
 | Capturas de Unity Catalog, del Job y del flujo ejecutado | [`capturas/`](capturas) (**las tomas tú**, ver la lista) |
 
-Cada notebook está en dos formatos con el mismo contenido: `.py` (formato fuente de Databricks, se abre directo desde un Git folder) e `.ipynb` (para **Import** y para el zip).
+Los notebooks se guardan en `.py` (formato fuente de Databricks, se abre directo desde un Git folder). Las versiones `.ipynb` **con resultados** se exportan desde Databricks después de ejecutarlos a [`notebooks_resultados/`](notebooks_resultados). No se guardan junto a los `.py` porque Databricks trataría los dos archivos como el mismo notebook y el Git folder no se clonaría completo.
 
 ## Organización en Unity Catalog
 
@@ -49,7 +49,7 @@ Cada esquema tiene un comentario que explica a qué apartado pertenece.
 ## Pasos en Databricks (lo que falta hacer tú)
 
 ### 1. Subir el código
-**Workspace → Create → Git folder** con la URL de este repositorio (después de hacer `git push`). Si no, **Workspace → Import** de los dos `.ipynb` y de los tres `.py` de `pipeline/`.
+**Workspace → Create → Git folder** con la URL de este repositorio (después de hacer `git push`). Si no, **Workspace → Import** de los dos notebooks `.py` y de los tres `.py` de `pipeline/`.
 
 ### 2. Datos
 Si usas el Git folder, el notebook y la tarea Bronze copian solos los CSV de `datos/` al volumen. Si importaste los archivos, sube los tres CSV a **Catalog → aerolinea_tf → fuentes → landing → Upload to this volume** después de ejecutar la celda 0.1.
@@ -81,7 +81,7 @@ Abrir `notebooks/02_ML_Retraso_Llegada`. En **Environment**, elegir **Standard**
 Seguir la lista de [`capturas/README.md`](capturas/README.md) y guardar las imágenes en `capturas/`.
 
 ### 8. Exportar los notebooks con resultados
-En cada notebook: **File → Export → IPython Notebook**. Guardar los dos `.ipynb` en `notebooks/`, sustituyendo los que no tienen salidas, para que el profesor vea los resultados.
+En cada notebook: **File → Export → IPython Notebook**. Guardar los dos `.ipynb` en `notebooks_resultados/` para que el profesor vea los resultados.
 
 ### 9. Empaquetar
 Desde la carpeta `Sesion1_Esp`:
@@ -103,7 +103,6 @@ zip -r Entrega_Final.zip Entrega_Final -x "*/__pycache__/*" "*.DS_Store"
 ```bash
 pip install pyspark==3.5.3 delta-spark==3.2.1 pandas scikit-learn matplotlib joblib mlflow-skinny   # Java 17
 python tests/run_local.py
-python tools/build_ipynb.py      # regenera los .ipynb a partir de los .py
 ```
 
 Último resultado: **5 tareas OK** (notebook 1-4: 31 celdas · 3 scripts · ML: 15 celdas), las 11 tablas coinciden y todos los `assert` se cumplen. En local se omiten `CREATE CATALOG` y `CREATE VOLUME`, que solo existen en Unity Catalog.
