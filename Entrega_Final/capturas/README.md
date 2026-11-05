@@ -1,31 +1,35 @@
-# Capturas para la entrega
+# Capturas de la entrega
 
-Guardar cada imagen en esta carpeta con el nombre indicado (PNG). En macOS: **⌘ + Shift + 4** y arrastrar sobre la zona.
+Tomadas en el workspace de Databricks Free Edition el 5 de noviembre de 2026.
 
 ## Unity Catalog (orden del proyecto)
 
-| Archivo | Qué mostrar |
+| Archivo | Qué muestra |
 |---|---|
-| `01_catalogo_esquemas.png` | **Catalog → aerolinea_tf** desplegado: los 6 esquemas `fuentes`, `bronze`, `silver`, `analisis`, `gold`, `ml` |
-| `02_volumen_landing.png` | **aerolinea_tf → fuentes → Volumes → landing** con los 3 CSV |
-| `03_tablas_bronze_silver.png` | Esquemas `bronze` y `silver` desplegados con sus tablas |
-| `04_tablas_analisis_gold_ml.png` | Esquemas `analisis`, `gold` y `ml` desplegados con sus tablas (y el volumen `modelos`) |
-| `05_gold_sample_data.png` | Una tabla Gold abierta (p. ej. `airline_ontime_kpi`) en la pestaña **Sample Data** |
-| `06_history_optimize.png` | Pestaña **History** de `gold.delay_airline_airport_month` con la operación `OPTIMIZE` |
+| `01_catalogo_esquemas.png` | Catálogo `aerolinea_tf` con sus esquemas: `fuentes`, `bronze`, `silver`, `analisis`, `gold` y `ml`, cada uno con el comentario del apartado al que pertenece |
+| `02_volumen_landing.png` | Volumen `aerolinea_tf.fuentes.landing` con los 3 CSV de origen |
+| `03_tablas_bronze.png` | Esquema `bronze`: `flights`, `airlines`, `airports` |
+| `04_tablas_silver.png` | Esquema `silver`: `flights_enriched` y las tres tablas de métricas |
+| `05_tablas_analisis.png` | Esquema `analisis`: las 8 tablas del apartado 3 |
+| `06_tablas_gold.png` | Esquema `gold`: las 4 tablas del apartado 4 |
+| `07_esquema_ml.png` | Esquema `ml`: `metricas_retraso`, `predicciones_retraso` y el volumen `modelos` |
+| `08_gold_sample_data.png` | `gold.airline_ontime_kpi` en **Sample Data**: KPI de puntualidad de las 6 aerolíneas |
+| `09_history_gold.png` | **History** de una tabla Gold: versiones escritas por el notebook y por el Job, y `SET TBLPROPERTIES` con la optimización automática. `OPTIMIZE` no crea versión porque cada tabla ya ocupa un solo archivo; sus métricas están en la sección 4.2 del notebook |
 
 ## Job y flujo completo
 
-| Archivo | Qué mostrar |
+| Archivo | Qué muestra |
 |---|---|
-| `07_job_tareas_dependencias.png` | Pestaña **Tasks** del Job con el grafo `Bronze_Ingestion → Silver_Transform → Gold_Analytics` |
-| `08_job_reintentos.png` | Panel de una tarea con **Retries** configurados |
-| `09_job_notificaciones_schedule.png` | Panel derecho del Job: **Job notifications** (correo) y **Schedules & Triggers** |
-| `10_job_run_exitoso.png` | Pestaña **Runs**: la ejecución con las **3 tareas en verde** (*Succeeded*) |
-| `11_job_run_detalle.png` | Detalle de la ejecución (vista de grafo o timeline) con la duración de cada tarea |
+| `10_job_tareas_dependencias.png` | Job `Trabajo_Final_Vuelos`: `Bronze_Ingestion → Silver_Transform → Gold_Analytics` |
+| `11_job_reintentos.png` | Tarea `Bronze_Ingestion`: reintentos (1 min de espera, hasta 3 intentos, reintento por timeout) y timeout de 20 min |
+| `12_job_notificaciones.png` | Notificaciones por correo *On success* y *On failure* |
+| `13_job_schedule.png` | Programación diaria a las 06:00 (America/Bogota) |
+| `14_job_runs.png` | Historial de ejecuciones: las 3 tareas en verde |
+| `15_job_run_exitoso.png` | Detalle de la ejecución: las 3 tareas *Succeeded* (34 s, 37 s y 35 s) |
 
 ## Machine learning
 
-| Archivo | Qué mostrar |
+| Archivo | Qué muestra |
 |---|---|
-| `12_mlflow_experimento.png` | **Experiments** → la ejecución `arbol_retraso_llegada` con sus métricas y parámetros |
-| `13_mlflow_artefactos.png` | Pestaña **Artifacts** de la ejecución (modelo, figura, CSV) |
+| `16_mlflow_run_metricas.png` | Ejecución `arbol_retraso_llegada` en MLflow: métricas (MAE 8,01 frente a 18,31), parámetros y artefactos |
+| `17_mlflow_artefactos.png` | Artefactos de la ejecución: modelo `.joblib`, figura de evaluación y CSV |

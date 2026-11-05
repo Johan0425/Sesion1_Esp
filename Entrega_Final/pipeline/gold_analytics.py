@@ -100,10 +100,15 @@ optimizaciones = {
     f"{GOLD}.airport_punctuality_ranking": None,
     f"{GOLD}.airline_ontime_kpi": None,
 }
+# Compactación automática en las escrituras futuras + OPTIMIZE / ZORDER ahora.
+# Con este volumen, en Serverless cada tabla ya ocupa un solo archivo y OPTIMIZE no reescribe nada.
+PROPIEDADES = "'delta.autoOptimize.optimizeWrite' = 'true', 'delta.autoOptimize.autoCompact' = 'true'"
 for tabla, zorder in optimizaciones.items():
+    spark.sql(f"ALTER TABLE {tabla} SET TBLPROPERTIES ({PROPIEDADES})")
     sentencia = f"OPTIMIZE {tabla}" + (f" ZORDER BY ({zorder})" if zorder else "")
-    print(sentencia)
-    spark.sql(sentencia)
+    metricas = spark.sql(sentencia).first()["metrics"]
+    print(f"{sentencia}: {metricas['totalConsideredFiles']} archivos revisados, "
+          f"{metricas['numFilesRemoved']} compactados, {metricas['numFilesAdded']} nuevos")
 
 #==========================
 # 4. Reconciliación con Silver

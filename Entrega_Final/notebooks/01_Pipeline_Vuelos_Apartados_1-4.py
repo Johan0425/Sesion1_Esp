@@ -637,11 +637,12 @@ guardar(ml_flights, "gold.ml_flights")
 
 # MAGIC %md
 # MAGIC ### 4.2 · Optimización Delta
+# MAGIC - **Optimización automática** (`delta.autoOptimize.optimizeWrite` y `autoCompact`): cada escritura futura genera archivos de buen tamaño y compacta los pequeños sin intervención manual. Queda registrada en el historial como `SET TBLPROPERTIES`.
 # MAGIC - **`OPTIMIZE`** compacta los archivos pequeños que dejan las escrituras en archivos más grandes.
-# MAGIC - **`ZORDER BY`** reordena los datos por las columnas de filtro más frecuentes, para que Delta salte archivos completos (*data skipping*) en las consultas de los dashboards: aerolínea y aeropuerto en la tabla mensual y fecha en la base de ML.
+# MAGIC - **`ZORDER BY`** reordena los datos por las columnas de filtro más frecuentes, para que Delta salte archivos completos (*data skipping*) en las consultas de los dashboards: aerolínea y aeropuerto en la tabla mensual, y fecha y aerolínea en la base de ML.
 # MAGIC - Las tablas de ranking son pequeñas (10 y 6 filas): basta con compactarlas.
 # MAGIC
-# MAGIC `DESCRIBE HISTORY` muestra la operación `OPTIMIZE` registrada en el log de Delta.
+# MAGIC La tabla de resultados muestra lo que hizo `OPTIMIZE` en cada tabla. **Con este volumen de datos, en Databricks Serverless cada tabla (o cada partición mensual de Silver) ya se escribe en un único archivo**: no hay nada que compactar, `OPTIMIZE` revisa los archivos, los deja como están y Delta no crea una versión nueva. La optimización tendría efecto si los datos crecieran con cargas diarias, y para entonces la compactación automática ya está activada.
 
 # COMMAND ----------
 
@@ -652,10 +653,20 @@ optimizaciones = {
     "gold.airport_punctuality_ranking": None,
     "gold.airline_ontime_kpi": None,
 }
+PROPIEDADES = "'delta.autoOptimize.optimizeWrite' = 'true', 'delta.autoOptimize.autoCompact' = 'true'"
+
+resumen_optimize = []
 for tabla, zorder in optimizaciones.items():
+    spark.sql(f"ALTER TABLE {CATALOGO}.{tabla} SET TBLPROPERTIES ({PROPIEDADES})")
     sentencia = f"OPTIMIZE {CATALOGO}.{tabla}" + (f" ZORDER BY ({zorder})" if zorder else "")
-    print(sentencia)
-    spark.sql(sentencia)
+    metricas = spark.sql(sentencia).first()["metrics"]
+    resumen_optimize.append((tabla, zorder or "-", metricas["totalConsideredFiles"],
+                             metricas["numFilesRemoved"], metricas["numFilesAdded"]))
+display(spark.createDataFrame(
+    resumen_optimize,
+    "tabla STRING, zorder_by STRING, archivos_revisados LONG, archivos_compactados LONG, archivos_nuevos LONG"))
+
+# COMMAND ----------
 
 display(spark.sql(f"DESCRIBE HISTORY {CATALOGO}.gold.delay_airline_airport_month")
         .select("version", "timestamp", "operation", "operationParameters"))

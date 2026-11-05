@@ -43,7 +43,7 @@ Cada esquema tiene un comentario que explica a qué apartado pertenece.
 
 - **Bronze:** se lee todo como texto con `FAILFAST` y se convierte con `try_cast`. Los retrasos llegan como `"25.0"` y pasan a `int` sin perder información. Se descartan **521 vuelos sin `flight_id`** (no había nulos en `airline_id` ni en `origin_airport`); quedan **49.479**.
 - **Silver:** `on_time` = `arrival_delay ≤ 15` min. `delay_category` se calcula sobre `arrival_delay`: None ≤ 0 · Short 1–15 · Medium 16–45 · Long > 45 · Unknown sin dato. `distance_km` = millas × 1,609344. Los **473 vuelos sin alguno de los retrasos no se rellenan**: un 0 inventaría vuelos puntuales. Se marcan con `delay_data_complete`.
-- **Gold:** cada tabla reconcilia con Silver (las sumas de vuelos y de vuelos puntuales coinciden). `OPTIMIZE ... ZORDER BY` se aplica sobre las columnas de filtro de los dashboards.
+- **Gold:** cada tabla reconcilia con Silver (las sumas de vuelos y de vuelos puntuales coinciden). Se activa la compactación automática (`delta.autoOptimize.*`) y se ejecuta `OPTIMIZE ... ZORDER BY` sobre las columnas de filtro de los dashboards. En Databricks, con este volumen cada tabla ya ocupa un solo archivo: `OPTIMIZE` revisa los archivos y no tiene nada que compactar. El notebook muestra esas métricas, y el historial registra `SET TBLPROPERTIES`.
 - **ML:** se predice el retraso de llegada **al despegar**, con la aerolínea, la ruta, la distancia, el día de la semana y el retraso de salida. Se entrena con enero–mayo y se evalúa con junio de 2025. El árbol baja el **MAE de 18,31 a 8,01 min** (−56 %) frente a la referencia del promedio. Un segundo árbol **sin el retraso de salida** apenas mejora (18,08): antes del despegue casi no se puede anticipar.
 
 ---
