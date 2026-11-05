@@ -38,6 +38,8 @@ display(spark.sql("""
 
 # COMMAND ----------
 
+import os
+
 import joblib
 import matplotlib.pyplot as plt
 import mlflow
@@ -51,6 +53,9 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.tree import DecisionTreeRegressor
 
 mlflow.autolog(disable=True)
+if "DATABRICKS_RUNTIME_VERSION" in os.environ:
+    # En Serverless, MLflow no puede leer el registro de la configuración de Spark: se indica explícitamente
+    mlflow.set_registry_uri("databricks-uc")
 print("scikit-learn:", sklearn.__version__)
 print("MLflow:", mlflow.__version__)
 

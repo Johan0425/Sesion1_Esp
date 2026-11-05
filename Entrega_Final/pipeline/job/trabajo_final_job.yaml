@@ -1,72 +1,70 @@
-# Job del apartado 5 · Trabajo_Final_Vuelos
-# Bronze_Ingestion -> Silver_Transform -> Gold_Analytics, cada tarea en su propio .py.
-#
-# Este archivo es la referencia de configuración. El .yaml que se entrega es el que exporta
-# Databricks después de construir el Job: Jobs & Pipelines -> Trabajo_Final_Vuelos ->
-# (⋮) View as code / Edit as YAML -> YAML -> copiar y guardar como pipeline/job/trabajo_final_job.yaml.
-# Antes de usarlo, reemplazar <TU_USUARIO> (carpeta del workspace) y <TU_CORREO>.
 resources:
   jobs:
-    Trabajo_Final_Vuelos:
+    trabajo_final_vuelos:
       name: Trabajo_Final_Vuelos
-      description: >-
-        Pipeline medallón de vuelos: lee los CSV del volumen aerolinea_tf.fuentes.landing,
-        publica Bronze, Silver y Gold en el catálogo aerolinea_tf y optimiza las tablas Gold.
-      max_concurrent_runs: 1
-      timeout_seconds: 3600
-      email_notifications:
-        on_success:
-          - <TU_CORREO>
-        on_failure:
-          - <TU_CORREO>
-      notification_settings:
-        no_alert_for_skipped_runs: true
-        no_alert_for_canceled_runs: true
-      # Actualización automática diaria a las 06:00 (hora de Colombia)
-      schedule:
-        quartz_cron_expression: "0 0 6 * * ?"
-        timezone_id: America/Bogota
-        pause_status: UNPAUSED
       tasks:
         - task_key: Bronze_Ingestion
           description: Lee los CSV, tipa, elimina nulos obligatorios y escribe aerolinea_tf.bronze
-          spark_python_task:
-            python_file: /Workspace/Users/<TU_USUARIO>/Sesion1_Esp/Entrega_Final/pipeline/bronze_ingestion.py
-            source: WORKSPACE
+          disabled: false
+          email_notifications: {}
           environment_key: default
           max_retries: 2
           min_retry_interval_millis: 60000
           retry_on_timeout: true
+          run_if: ALL_SUCCESS
+          spark_python_task:
+            python_file: /Workspace/Users/joanpe.dev@gmail.com/Sesion1_Esp/Entrega_Final/pipeline/bronze_ingestion.py
+            source: WORKSPACE
           timeout_seconds: 1200
         - task_key: Silver_Transform
-          description: Lee Bronze, enriquece y valida, y escribe aerolinea_tf.silver
           depends_on:
             - task_key: Bronze_Ingestion
-          run_if: ALL_SUCCESS
-          spark_python_task:
-            python_file: /Workspace/Users/<TU_USUARIO>/Sesion1_Esp/Entrega_Final/pipeline/silver_transform.py
-            source: WORKSPACE
+          description: Lee Bronze, enriquece y valida, y escribe aerolinea_tf.silver
+          disabled: false
+          email_notifications: {}
           environment_key: default
           max_retries: 2
           min_retry_interval_millis: 60000
           retry_on_timeout: true
+          run_if: ALL_SUCCESS
+          spark_python_task:
+            python_file: /Workspace/Users/joanpe.dev@gmail.com/Sesion1_Esp/Entrega_Final/pipeline/silver_transform.py
+            source: WORKSPACE
           timeout_seconds: 1200
         - task_key: Gold_Analytics
-          description: Lee Silver, publica los KPI en aerolinea_tf.gold, optimiza y reconcilia
           depends_on:
             - task_key: Silver_Transform
-          run_if: ALL_SUCCESS
-          spark_python_task:
-            python_file: /Workspace/Users/<TU_USUARIO>/Sesion1_Esp/Entrega_Final/pipeline/gold_analytics.py
-            source: WORKSPACE
+          description: Lee Silver, publica los KPI en aerolinea_tf.gold, optimiza y reconcilia
+          disabled: false
+          email_notifications: {}
           environment_key: default
           max_retries: 2
           min_retry_interval_millis: 60000
           retry_on_timeout: true
+          run_if: ALL_SUCCESS
+          spark_python_task:
+            python_file: /Workspace/Users/joanpe.dev@gmail.com/Sesion1_Esp/Entrega_Final/pipeline/gold_analytics.py
+            source: WORKSPACE
           timeout_seconds: 1200
-      queue:
-        enabled: true
+      description: 'Pipeline medallón de vuelos: lee los CSV del volumen aerolinea_tf.fuentes.landing, publica Bronze, Silver y Gold en el catálogo aerolinea_tf y optimiza las tablas Gold.'
+      email_notifications:
+        on_failure:
+          - joanpe.dev@gmail.com
+        on_success:
+          - joanpe.dev@gmail.com
       environments:
         - environment_key: default
           spec:
             environment_version: "2"
+      max_concurrent_runs: 1
+      notification_settings:
+        no_alert_for_canceled_runs: true
+        no_alert_for_skipped_runs: true
+      queue:
+        enabled: true
+      schedule:
+        pause_status: UNPAUSED
+        quartz_cron_expression: 0 0 6 * * ?
+        timezone_id: America/Bogota
+      timeout_seconds: 3600
+      webhook_notifications: {}
