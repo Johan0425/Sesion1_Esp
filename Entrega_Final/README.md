@@ -8,16 +8,18 @@ Pipeline Bronze → Silver → Gold sobre 50.000 vuelos (`flights.csv`, `airline
 
 | Apartado / entregable | Archivo |
 |---|---|
-| 1 · Ingestión y limpieza (Bronze) | [`notebooks/01_Pipeline_Vuelos_Apartados_1-4`](notebooks/01_Pipeline_Vuelos_Apartados_1-4.py) · secciones 0 y 1 |
+| 1 · Ingestión y limpieza (Bronze) | [`notebooks/01_Pipeline_Vuelos_Apartados_1-4`](notebooks/01_Pipeline_Vuelos_Apartados_1-4.py) · secciones 0 y 1 (con resultados: [`notebooks_resultados/`](notebooks_resultados)) |
 | 2 · Transformaciones y modelado (Silver) | mismo notebook · sección 2 |
 | 3 · Análisis avanzado y métricas | mismo notebook · sección 3 |
 | 4 · Capa Gold, `OPTIMIZE` / `ZORDER BY` | mismo notebook · sección 4 y conclusiones de negocio |
 | 5 · Ficheros `.py` de bronce, plata y oro | [`pipeline/bronze_ingestion.py`](pipeline/bronze_ingestion.py) · [`silver_transform.py`](pipeline/silver_transform.py) · [`gold_analytics.py`](pipeline/gold_analytics.py) |
-| 5 · `.yaml` del Job | [`pipeline/job/trabajo_final_job.yaml`](pipeline/job/trabajo_final_job.yaml) (**reemplazar por el que exporta Databricks**, ver paso 5) |
-| 6 · Machine learning | [`notebooks/02_ML_Retraso_Llegada`](notebooks/02_ML_Retraso_Llegada.py) y [`resultados_ml/`](resultados_ml) |
+| 5 · `.yaml` del Job | [`pipeline/job/trabajo_final_job.yaml`](pipeline/job/trabajo_final_job.yaml), exportado del Job real `Trabajo_Final_Vuelos` |
+| 6 · Machine learning | [`notebooks/02_ML_Retraso_Llegada`](notebooks/02_ML_Retraso_Llegada.py), con resultados en [`notebooks_resultados/`](notebooks_resultados), y [`resultados_ml/`](resultados_ml): métricas, 8.255 predicciones y figura de la ejecución en Databricks |
 | Capturas de Unity Catalog, del Job y del flujo ejecutado | [`capturas/`](capturas) (**las tomas tú**, ver la lista) |
 
-Los notebooks se guardan en `.py` (formato fuente de Databricks, se abre directo desde un Git folder). Las versiones `.ipynb` **con resultados** se exportan desde Databricks después de ejecutarlos a [`notebooks_resultados/`](notebooks_resultados). No se guardan junto a los `.py` porque Databricks trataría los dos archivos como el mismo notebook y el Git folder no se clonaría completo.
+Los notebooks se guardan en `.py` (formato fuente de Databricks, se abre directo desde un Git folder). [`notebooks_resultados/`](notebooks_resultados) contiene la ejecución en Databricks Serverless de cada uno, con todas sus salidas, en `.ipynb` y en `.html` (la exportación de Databricks, se abre en el navegador). No se guardan junto a los `.py` porque Databricks trataría los dos archivos como el mismo notebook y el Git folder no se clonaría completo.
+
+**Estado en Databricks (5-nov-2026):** los dos notebooks y el Job `Trabajo_Final_Vuelos` se ejecutaron en Serverless con resultado *Succeeded* (Job: 3 tareas al primer intento, ~30 s cada una). La ejecución de MLflow `arbol_retraso_llegada` tiene el run ID `706f29f92bb14971a35ab64884fcbe2c`. **Solo faltan las capturas y el zip.**
 
 ## Organización en Unity Catalog
 
