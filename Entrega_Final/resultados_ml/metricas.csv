@@ -1,0 +1,4 @@
+modelo,mae_entrenamiento_min,mae_evaluacion_min,rmse_evaluacion_min,run_id,fecha_corte,filas_entrenamiento,filas_evaluacion
+arbol_al_despegar,7.9585,8.0099,10.0339,bb54ecc4f2ce41d7a5f8108a766882d7,2025-06-01,40751,8255
+arbol_antes_de_salir,17.8281,18.0801,22.644,bb54ecc4f2ce41d7a5f8108a766882d7,2025-06-01,40751,8255
+promedio,18.2583,18.313,23.0009,bb54ecc4f2ce41d7a5f8108a766882d7,2025-06-01,40751,8255

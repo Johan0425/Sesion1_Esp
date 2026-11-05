@@ -3,6 +3,8 @@
 **Arquitecturas ETL y Modelos de IA Aplicados · EAM · 2026-II**
 
 > **Entrega 2 (sesiones 3 y 4):** pipeline Bronze → Silver → Gold de la aerolínea y su Job en [`Entrega_2_Sesiones_3-4/`](Entrega_2_Sesiones_3-4).
+>
+> **Entrega final (trabajo final, sesión 5):** apartados 1 a 6 (Bronze/Silver/análisis/Gold de vuelos, Job de 3 tareas y modelo de retraso con MLflow) en [`Entrega_Final/`](Entrega_Final).
 
 Notebook completo de la práctica, de la **Demo 1 a la Demo 4**, con las respuestas a las preguntas de la **diapositiva 57**.
 
